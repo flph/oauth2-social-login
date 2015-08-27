@@ -1,8 +1,9 @@
 {
     "name": "phantom/oauth2-social-login",
-    "version": "1.0",
     "description": "A simple oauth2 social login helper",
     "keywords": ["laravel", "social", "login", "oauth2"],
+    "type": "package",
+    "license": "MIT",
     "authors": [
         {
             "name": "Phantom",
