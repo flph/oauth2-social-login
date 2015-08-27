@@ -17,6 +17,6 @@
             "Phantom\\Oauth2SocialLogin": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
 
