@@ -1,24 +1,30 @@
 {
-    "name": "phantom/oauth2-social-login",
-    "description": "A simple oauth2 social login helper",
-    "keywords": ["laravel", "social", "login", "oauth2"],
-    "type": "package",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Phantom",
-            "email": "alquimista@gmx.pt"
-        }
-    ],
-    "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "4.2.*"
-    },
-    "autoload": {
-        "psr-0": {
-            "Phantom\\Oauth2SocialLogin": "src/"
-        }
-    },
-    "minimum-stability": "stable"
+  "name": "phantom/oauth2-social-login",
+  "version": "0.0.1",
+  "description": "A simple oauth2 social login helper",
+  "keywords": [
+    "laravel",
+    "social",
+    "login",
+    "oauth2"
+  ],
+  "type": "package",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Phantom",
+      "email": "alquimista@gmx.pt"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "illuminate/support": "4.2.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "Phantom\\Oauth2SocialLogin": "src/"
+    }
+  },
+  "minimum-stability": "stable"
 }
 
