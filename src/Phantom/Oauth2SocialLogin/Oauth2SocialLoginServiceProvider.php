@@ -18,8 +18,8 @@ class Oauth2SocialLoginServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bindShared('facebook', function () {
-			return $this->app->make('Phantom\Oauth2SocialLogin\Oauth2FacebookLogin');
+		$this->app->bindShared('facebook', function ($app) {
+			return new Oauth2FacebookLogin($app['config']);
 		});
 	}
 

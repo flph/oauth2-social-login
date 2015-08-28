@@ -1,8 +1,8 @@
 <?php namespace Phantom\Oauth2SocialLogin;
 
-use Config;
 use DateTime;
 use Exception;
+use Illuminate\Config\Repository;
 
 class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 
@@ -18,15 +18,15 @@ class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 	/**
 	 * The constructor
 	 */
-	public function __construct()
+	public function __construct(Repository $config)
 	{
-		$this->authorizationBaseUrl = Config::get('oauth2-social-login::facebook.authorization_base_url');
-		$this->tokenUrl             = Config::get('oauth2-social-login::facebook.token_url');
-		$this->clientId             = Config::get('oauth2-social-login::facebook.client_id');
-		$this->clientSecret         = Config::get('oauth2-social-login::facebook.client_secret');
-		$this->redirectUri          = Config::get('oauth2-social-login::facebook.redirect_uri');
-		$this->profileUrl           = Config::get('oauth2-social-login::facebook.profile_url');
-		$this->scope                = implode(',', Config::get('oauth2-social-login::facebook.scopes'));
+		$this->authorizationBaseUrl = $config->get('oauth2-social-login::facebook.authorization_base_url');
+		$this->tokenUrl             = $config->get('oauth2-social-login::facebook.token_url');
+		$this->clientId             = $config->get('oauth2-social-login::facebook.client_id');
+		$this->clientSecret         = $config->get('oauth2-social-login::facebook.client_secret');
+		$this->redirectUri          = $config->get('oauth2-social-login::facebook.redirect_uri');
+		$this->profileUrl           = $config->get('oauth2-social-login::facebook.profile_url');
+		$this->scope                = implode(',', $config->get('oauth2-social-login::facebook.scopes'));
 	}
 
 	/**
@@ -82,15 +82,14 @@ class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 			parse_str($response, $params);
 
 			if (!empty($params['access_token'])) {
-				if(!empty($params['expires'])){
-					$ts = $params['expires'];
-					$date = new DateTime("@".(strtotime("now") + $ts));
+				if (!empty($params['expires'])) {
+					$ts     = $params['expires'];
+					$date   = new DateTime("@" . (strtotime("now") + $ts));
 					$expire = $date->format('Y-m-d H:i:s');
 				}
 				return $params['access_token'];
-			} else {
-				throw new Exception('No access token', '401');
 			}
+			throw new Exception('No access token', '401');
 		}
 
 		#If no response or token
