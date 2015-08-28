@@ -40,12 +40,12 @@ class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 	 */
 	private function curl($url, &$response, &$error)
 	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$response = curl_exec($ch);
-		$error    = curl_errno($ch);
-		curl_close($ch);
+		$handler = curl_init();
+		curl_setopt($handler, CURLOPT_URL, $url);
+		curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($handler);
+		$error    = curl_errno($handler);
+		curl_close($handler);
 	}
 
 	/**
@@ -83,9 +83,9 @@ class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 
 			if (!empty($params['access_token'])) {
 				if (!empty($params['expires'])) {
-					$ts     = $params['expires'];
-					$date   = new DateTime("@" . (strtotime("now") + $ts));
-					$expire = $date->format('Y-m-d H:i:s');
+					$expires = $params['expires'];
+					$date    = new DateTime("@" . (strtotime("now") + $expires));
+					$expire  = $date->format('Y-m-d H:i:s');
 				}
 				return $params['access_token'];
 			}
