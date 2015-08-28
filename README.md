@@ -17,7 +17,7 @@ At this time is only implemented facebook provider.
 Add this to your composer.json file, in the require object:
 
 ```javascript
-"phantom/oauth2-social-login": "^0.0.1"
+"phantom/oauth2-social-login": "^0.0.2"
 ```
 
 After that, run composer install to install the package.
@@ -86,10 +86,10 @@ This implementation assumes that you want to allow your users to log in or sign 
 
 #### Social Login Flow
 
-Simply create a link to the built-in controller to initiate a log in flow. The user will be redirected to the provider login page before they return to your website.
+* Simply create a link to the redirect login generated url. The user will be redirected to the provider login page before they return to your website.
 
-If an existing user is already linked to the provider account, they will be logged in as that user.
+* If an existing user is already linked to the provider account do the log in as that user.
 
-If an existing user is not found for the provider account, a new user record will be created and then a link to the provider account will be made before they are logged in as that user.
+* If an existing user is not found for the provider account, a new user record must be created and then a link to the provider account must be made before he is logged in as that user.
 
-You can also associate a social provider account to an existing user if they are already logged in.
+* You can also associate a social provider account to an existing user if they are already logged in.
