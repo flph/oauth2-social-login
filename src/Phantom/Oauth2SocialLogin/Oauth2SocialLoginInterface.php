@@ -13,11 +13,12 @@ interface Oauth2SocialLoginInterface {
 	 * Get Authorization token from oauth2 provider
 	 *
 	 * @param string $code The access code from oauth provider
+	 * @param string $expire date when the token expire
 	 *
 	 * @return string Access token
 	 * @throws \Exception
 	 */
-	public function getToken($code);
+	public function getToken($code, &$expire = '');
 
 	/**
 	 * Get own profile user info

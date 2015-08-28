@@ -1,8 +1,8 @@
 <?php namespace Phantom\Oauth2SocialLogin;
 
 use Config;
+use DateTime;
 use Exception;
-use Redirect;
 
 class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 
@@ -30,6 +30,25 @@ class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 	}
 
 	/**
+	 * Fetch data from web
+	 *
+	 * @param string $url
+	 * @param mixed  $response
+	 * @param int    $error
+	 *
+	 * @return array
+	 */
+	private function curl($url, &$response, &$error)
+	{
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		$error    = curl_errno($ch);
+		curl_close($ch);
+	}
+
+	/**
 	 * Get the redirect url to the facebook login url
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
@@ -42,23 +61,20 @@ class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 	/**
 	 * Get Authorization token from facebook
 	 *
-	 * @param string $code The facebook post code
+	 * @param string $code   The facebook post code
+	 * @param string $expire Tate when the token expire
 	 *
 	 * @return string Access token
 	 * @throws \Exception
 	 */
-	public function getToken($code)
+	public function getToken($code, &$expire = '')
 	{
 		#Build token url
 		$token_url = "$this->tokenUrl?client_id=$this->clientId&redirect_uri=$this->redirectUri&client_secret=$this->clientSecret&code=$code";
 
 		#Connect to facebook
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $token_url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$response = curl_exec($ch);
-		$error    = curl_errno($ch);
-		curl_close($ch);
+		$response = $error = null;
+		$this->curl($token_url, $response, $error);
 
 		#Extract Token
 		if ($response) {
@@ -66,11 +82,15 @@ class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 			parse_str($response, $params);
 
 			if (!empty($params['access_token'])) {
+				if(!empty($params['expires'])){
+					$ts = $params['expires'];
+					$date = new DateTime("@".(strtotime("now") + $ts));
+					$expire = $date->format('Y-m-d H:i:s');
+				}
 				return $params['access_token'];
 			} else {
 				throw new Exception('No access token', '401');
 			}
-
 		}
 
 		#If no response or token
@@ -93,13 +113,9 @@ class Oauth2FacebookLogin implements Oauth2SocialLoginInterface {
 		#Build profile url
 		$graph_url = "$this->profileUrl?access_token=$token";
 
-		#Fetch Profile Data
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $graph_url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$response = curl_exec($ch);
-		$error    = curl_errno($ch);
-		curl_close($ch);
+		#Connect to facebook
+		$response = $error = null;
+		$this->curl($graph_url, $response, $error);
 
 		#If no response
 		if ($error) {
