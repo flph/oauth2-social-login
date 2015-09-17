@@ -18,6 +18,7 @@ Add this to your composer.json file, in the require object:
 
 ```javascript
 "phantom/oauth2-social-login": "^0.0.2"
+
 ```
 
 After that, run composer install to install the package.
